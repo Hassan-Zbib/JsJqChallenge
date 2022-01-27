@@ -1,8 +1,6 @@
-var inProgress = false
 var btns = []
 var random_btns = []
 var queue = []
-
 // function fadeOut(id) {
 //     var opacity = 0
 //     var intervalID = 0
@@ -39,16 +37,17 @@ var queue = []
 // } 
 
 function playGame() {
+    
+    document.getElementById("title").textContent = `Level ${random_btns.length + 1}`
     var random_btn = btns[ Math.floor(Math.random() * btns.length ) ]
     random_btns.push( random_btn )
-
-    console.log(random_btns)
+    
     queue = []
     for ( var i = random_btns.length -1 ; i >= 0; i--) {
         queue.push(random_btns[i])
     }
 
-    console.log(queue)
+    console.log(random_btns)
 
 
     playAudio(random_btn)
@@ -73,37 +72,35 @@ function chooseBtn(event) {
         document.getElementById(id).classList.remove("pressed")
     }, 100)
 
+
     if (id === queue.at(-1)) {
         queue.pop()
-        checkState()
+        if (queue.length === 0) {
+            playGame()
+        }
     } else {
         lose()
     }
 }
 
-function checkState() {
-
-}
-
 function start() {
-    if (inProgress === false) {
 
-        document.getElementById("title").textContent = `Level ${random_btns.length + 1}`
-
+        
         var tmp = document.querySelectorAll(".btn")
         for ( var i = 0 ; i < tmp.length ; i ++) {
             tmp[i].addEventListener("click", chooseBtn)
-
-            playGame()
-            inProgress = true
         }
-    }
+
+        var body = document.querySelector("body")
+        body.removeEventListener("keypress", start)
+
+
+        playGame()
 }
 
 function lose() {
-    if (inProgress === true) {
             
-    document.getElementById("title").textContent = "Game Over, Press Any Key To Restart"
+    document.getElementById("title").textContent = 'Game Over, Press Any Key To Restart'
     playAudio("wrong")
 
     var tmp = document.querySelectorAll(".btn")
@@ -111,11 +108,10 @@ function lose() {
         tmp[i].removeEventListener("click", chooseBtn)
     }
 
+    var body = document.querySelector("body")
+    body.addEventListener("keypress", start)
 
         random_btns = []
-        inProgress = false
-     }
-
 }
 
 function playAudio(btnID) {
@@ -123,12 +119,10 @@ function playAudio(btnID) {
     snd.play()
 }
 
-
 function main() {
     var body = document.querySelector("body")
     body.addEventListener("keypress", start)
-    body.addEventListener("click", start)
-
+    
     var tmp = document.querySelectorAll(".btn")
     for ( var i = 0 ; i < tmp.length ; i ++) {
         btns[i] = tmp[i].id
