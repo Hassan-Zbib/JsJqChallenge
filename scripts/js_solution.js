@@ -3,6 +3,7 @@ var random_btns = []
 var queue = []
 
 function playGame() {
+    // add level
     document.getElementById("title").textContent = `Level ${random_btns.length + 1}`
     var random_btn = btns[Math.floor(Math.random() * btns.length)]
     random_btns.push(random_btn)
@@ -13,7 +14,8 @@ function playGame() {
     }
 
     playAudio(random_btn)
-
+    
+    // blink div
     var btn = document.getElementById(random_btn)
     btn.style.opacity = 0
 
@@ -24,6 +26,7 @@ function playGame() {
 
 function chooseBtn(event) {
     id = event.target.id
+    // blink div
     document.getElementById(id).classList.add("pressed")
 
     setTimeout(function () {
@@ -31,6 +34,7 @@ function chooseBtn(event) {
         document.getElementById(id).classList.remove("pressed")
     }, 100)
 
+    // check queue status and pop
     if (id === queue.at(-1)) {
         queue.pop()
         if (queue.length === 0) {
@@ -50,13 +54,20 @@ function start() {
     var body = document.querySelector("body")
     body.removeEventListener("keypress", start)
 
+    // initiate game
     playGame()
 }
 
 function lose() {
     document.getElementById("title").textContent = 'Game Over, Press Any Key To Restart'
-    playAudio("wrong")
+    // blink body
+    document.querySelector("body").classList.add("game-over")
+    setTimeout(function() {
+        document.querySelector("body").classList.remove("game-over")
+    }, 100);
 
+    playAudio("wrong")
+    // setup listeners
     var tmp = document.querySelectorAll(".btn")
     for (var i = 0; i < tmp.length; i++) {
         tmp[i].removeEventListener("click", chooseBtn)
