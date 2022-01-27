@@ -51,11 +51,10 @@ function start() {
         tmp[i].addEventListener("click", chooseBtn)
     }
 
-    var body = document.querySelector("body")
-    body.removeEventListener("keypress", start)
+    document.querySelector("body").removeEventListener("keypress", start)
 
     // initiate game
-    playGame()
+    setTimeout(playGame, 1000)
 }
 
 function lose() {
@@ -73,8 +72,7 @@ function lose() {
         tmp[i].removeEventListener("click", chooseBtn)
     }
 
-    var body = document.querySelector("body")
-    body.addEventListener("keypress", start)
+    document.querySelector("body").addEventListener("keypress", start)
 
     random_btns = []
 }
@@ -85,12 +83,11 @@ function playAudio(btnID) {
 }
 
 function main() {
-    var body = document.querySelector("body")
-    body.addEventListener("keypress", start)
+    document.querySelector("body").addEventListener("keypress", start)
 
     var tmp = document.querySelectorAll(".btn")
     for (var i = 0; i < tmp.length; i++) {
-        btns[i] = tmp[i].id
+        btns.push(tmp[i].id)
     }
 }
 
